@@ -2,111 +2,25 @@
 <html>
 <head>
 <title>Test</title>
-<style>
-input[type="text"], input[type="password"], input[type="email"]{
-    border: 1px solid #DCDEE0;
-    vertical-align: middle;
-    border-radius: 3px;
-    height: 50px;
-    padding: 0px 16px;
-    font-size: 14px;
-    color: #555555;
-    background-color: #ffffff;
-	
-}
-input:focus {
-     border-color: rgb(0,153,204);
-}
-
-</style>
-<script src="/Acme/H5/BaseFun.js"></script>
+<script src="/BaseFun.js"></script>
 <script>
-// JavaScript source code
-var BrwsrGet = function () {
-    var nAgt = navigator.userAgent;
-    var nameOffset, verOffset, ix;
-
-    // In Opera 15+, the true version is after "OPR/" 
-    if ((verOffset = nAgt.indexOf("OPR/")) != -1) {
-        browserName = "Opera";
-        fullVersion = nAgt.substring(verOffset + 4);
-    }
-	// In MSIE, the true version is after "MSIE" in userAgent
-    else if ((verOffset = nAgt.indexOf("Edge/")) != -1) {
-        browserName = "Edge";
-        fullVersion = nAgt.substring(verOffset + 5);
-    }
-    // In MSIE, the true version is after "MSIE" in userAgent
-    else if ((verOffset = nAgt.indexOf("MSIE ")) != -1) {
-        browserName = "MS IE";
-        fullVersion = nAgt.substring(verOffset + 5);
-    }
-	//IE 11 edge mode
-	else if ((verOffset = nAgt.indexOf("Trident/")) != -1) {
-        browserName = "MS IE";
-		fullVersion = nAgt.substring(verOffset + 8);
-		if ((verOffset = nAgt.indexOf("rv:")) != -1)
-			fullVersion = nAgt.substring(verOffset + 3);
-    }
-    // In Edge, the true version is after "Edge" in userAgent
-    else if ((verOffset = nAgt.indexOf("Edge/")) != -1) {
-        browserName = "Edge";
-        fullVersion = nAgt.substring(verOffset + 5);
-    }
-    // In Chrome, the true version is after "Chrome" 
-    else if ((verOffset = nAgt.indexOf("Chrome/")) != -1) {
-        browserName = "Chrome";
-        fullVersion = nAgt.substring(verOffset + 7);
-    }
-    // In Safari, the true version is after "Safari" or after "Version" 
-    else if ((verOffset = nAgt.indexOf("Safari/")) != -1) {
-        browserName = "Safari";
-        fullVersion = nAgt.substring(verOffset + 7);
-        if ((verOffset = nAgt.indexOf("Version")) != -1)
-            fullVersion = nAgt.substring(verOffset + 8);
-    }
-    // In Firefox, the true version is after "Firefox" 
-    else if ((verOffset = nAgt.indexOf("Firefox/")) != -1) {
-        browserName = "Firefox";
-        fullVersion = nAgt.substring(verOffset + 8);
-    }
-    // In most other browsers, "name/version" is at the end of userAgent 
-    else if ((nameOffset = nAgt.lastIndexOf(' ') + 1) <
-			  (verOffset = nAgt.lastIndexOf('/'))) {
-        browserName = nAgt.substring(nameOffset, verOffset);
-        fullVersion = nAgt.substring(verOffset + 1);
-    }
-	else
+	var fun=function(evt) 
 	{
-		browserName = "Unknown";
-        fullVersion = "0.0.0";
-	}
-    // trim the fullVersion string at semicolon/space if present
-    if ((ix = fullVersion.indexOf(";")) != -1)
-        fullVersion = fullVersion.substring(0, ix);
-    if ((ix = fullVersion.indexOf(" ")) != -1)
-        fullVersion = fullVersion.substring(0, ix);
-    if ((ix = fullVersion.indexOf(")")) != -1)
-        fullVersion = fullVersion.substring(0, ix);
-    majorVersion = parseInt(fullVersion, 10);
-	
-	console.log(sprintf("name=%s, major=%s", browserName, majorVersion));
-	return {"Name": browserName, "Major": majorVersion};
-}
-console.log(BrwsrGet());
-</script>
-<script>
-	var Test = function()
+		if (evt.type != "loadend")
+			return;
+		console.log(evt.target.responseText);
+	};
+	var TestGet = function()
 	{
-		//HttpAsync("POST","https://test1.eaglethewings.com/.well-known/acme-challenge/tt?wrt","dafadfafasfaf",0,0,0);
-		HttpAsync("POST","https://tech.eaglethewings.com/.well-known/acme-challenge/9023?wrt","9023",0,0,0);
+		HttpAsync("Get","http://127.knacc.eaglethewings.com/Db/RmtDb.js?list&db",0,fun,0,0);
 		//HttpAsync("POST","https://10.0.90.206/.well-known/acme-challenge/1090206?wrt","10.0.90.206",0,0,0);
 	}
 </script>
 </head>
 <body>
-	<button onclick="Test();" >Test</button><br>
+	<button onclick="TestGet();" >TestGet</button><br>
 	<br>
 	<input type="text" style=" width: 100px;height: 20px; " value="asdfasf">
 </body>
 </html>
+
