@@ -62,3 +62,10 @@ PreLoadCls.prototype.Get = function(id)
 	}
 	return 0;
 }
+PreLoadCls.prototype.Clr = function()
+{
+	this.HttpAry=[];
+	this.HttpResNum=0;
+	this.WndNum=0;
+	this.WndResNum=0;
+}

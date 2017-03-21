@@ -24,9 +24,11 @@ var DbTbView= function(div, tb_ary)
 	div.innerHTML="";	
 	div.appendChild(table);
 }
-var DbRsView= function(div, tb_ary, rs_ary)
+var DbRsView= function(div, name, tb_ary, rs_ary)
 {
 	var table=div.querySelector('table');
+	var cap= table.createCaption();
+    cap.innerHTML = sprintf("<b>%s</b>", name);
 	var fd_num=(tb_ary.length-1)/2;
 	for (var i = 1; i < rs_ary.length; i+=fd_num)
 	{
@@ -51,9 +53,13 @@ var DbRsView= function(div, tb_ary, rs_ary)
 	tr.appendChild(td);	
 	for (var j=0; j < fd_num; j++)
 	{
-		var text = document.createTextNode("");
 		var td = document.createElement('td');		
-		td.appendChild(text);
+		if (j>0)
+		{
+			var text = document.createTextNode("nil");		
+			td.appendChild(text);
+			td.contentEditable=true;
+		}
 		tr.appendChild(td);	
 	}
 	table.appendChild(tr);		

@@ -88,32 +88,68 @@ table, th, td {
 		var blob=JsonAryToBlob(ary);
 		HttpAsync("Post",url,blob,fun,0,0);
 	}
+
+    var DbDiv;
+	var TbIdx=0;
+	var TbfdAry=[];
+	var TbrsAry=[];
+	var Tb0FdNum,Tb0RsNum;
 	
-	var GrpTbAry=[];
-	var GrpRsAry=[];
-	var GrpDivAry=[];
-	
-	var preload=new PreLoadCls();
-	preload.Add(sprintf("http://127.knacc.eaglethewings.com/Db/RmtDb.js?%s&%s&0", "tbfd", 0), "tbfd");
-	preload.Add(sprintf("http://127.knacc.eaglethewings.com/Db/RmtDb.js?%s&%s&0", "list", 0), "list");	
-	preload.End(1, function()
+	var TbDivAry=[];
+	var TbOffAry=[];	
+
+	var TbViewAdd=function(tb_idx)
 	{
 		var res, ary;
-		res=preload.Get("tbfd");
+		res=preload.Get("tbfd"+tb_idx);
 		console.log(res.ResText);		
 		ary=JSON.parse(res.ResText);
-		GrpTbAry.push(ary);
-		res=preload.Get("list");
+		TbfdAry.push(ary);
+		res=preload.Get("list"+tb_idx);
 		console.log(res.ResText);	
 		ary=JSON.parse(res.ResText);
-		GrpRsAry.push(ary);		
-		var div=document.getElementById("tb0");
-		GrpDivAry.push(div);		
+		TbrsAry.push(ary);		
+		preload.Clr();		
+
+		if (tb_idx==0)
+		{
+			DbDiv=document.getElementById("db_div");
+			Tb0FdNum=(TbfdAry[0].length-1)/2;
+			Tb0RsNum=(TbrsAry[0].length-1)/Tb0FdNum;
+		}
 		
-		DbTbView(GrpDivAry[0], GrpTbAry[0]);
-		DbRsView(GrpDivAry[0], GrpTbAry[0], GrpRsAry[0]);
-	}, 0, 0);
+		var div=document.createElement("div");
+		DbDiv.appendChild(div);
+		TbDivAry.push(div);		
+		var off=1+Tb0FdNum*tb_idx;
+		TbOffAry.push(off);		
+		
+		DbTbView(TbDivAry[tb_idx], TbfdAry[tb_idx]);
+		DbRsView(TbDivAry[tb_idx], TbrsAry[0][off+1], TbfdAry[tb_idx], TbrsAry[tb_idx]);
+	}
 	
+	var TbViewAsk=function(preload, tb_idx)
+	{
+		preload.Clr();	
+		preload.Add(sprintf("http://127.knacc.eaglethewings.com/Db/RmtDb.js?%s&%s&0", "tbfd", tb_idx), "tbfd"+tb_idx);
+		preload.Add(sprintf("http://127.knacc.eaglethewings.com/Db/RmtDb.js?%s&%s&0", "list", tb_idx), "list"+tb_idx);	
+	}
+	
+	var preload=new PreLoadCls();
+	TbViewAsk(preload, TbIdx);
+	var preload_cb=function()
+	{
+		TbViewAdd(TbIdx);
+		TbIdx++;
+		
+		//if (TbIdx>=2)		
+		if (TbIdx>=Tb0RsNum)
+			return;
+		
+		TbViewAsk(preload, TbIdx);
+		preload.End(0, preload_cb, 0, 0);
+	};
+	preload.End(1, preload_cb, 0, 0);
 	
 </script>
 </head>
@@ -127,7 +163,7 @@ table, th, td {
 	<button onclick="TbPostUpd();" >TbPostUpd</button><br>		
 	<button onclick="TbPostDel();" >TbPostDel</button><br>	
 	<br>
-	<div id="tb0"></div>
+	<div id="db_div"></div>
 </body>
 </html>
 
