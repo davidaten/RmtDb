@@ -81,15 +81,20 @@ function StrChgCase(str, type, off, len)
 	
 	return res;
 }
-function extend(destination, source) 
+//Allow my own single and multiple inheritance
+function PrototypeExtend(dst, src) 
 {
-	for (var k in source) 
-		if (source.hasOwnProperty(k)) 
-			destination[k] = source[k];
-  return destination; 
+	var fun=dst.constructor;
+	for (var k in src) 
+		if (src.hasOwnProperty(k)) 
+			dst[k] = src[k];
+	dst.constructor=fun;		
+	return dst; 
 }
-function Callback(evt, cb_fun, cb_obj, cb_tag)
+function CallBack(evt, cb_fun, cb_obj, cb_tag)
 {
+	if (!cb_fun)
+		return;
 	if (cb_obj)
 		cb_fun.call(cb_obj, evt, cb_tag);
 	else

@@ -2,7 +2,15 @@
 <html>
 <head>
 <title>Test</title>
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+</style>
 <script src="/BaseFun.js"></script>
+<script src="/HttpReq.js"></script>
+<script src="/DbFun.js"></script>
 <script>
 
 	var fun=function(evt) 
@@ -81,6 +89,32 @@
 		HttpAsync("Post",url,blob,fun,0,0);
 	}
 	
+	var GrpTbAry=[];
+	var GrpRsAry=[];
+	var GrpDivAry=[];
+	
+	var preload=new PreLoadCls();
+	preload.Add(sprintf("http://127.knacc.eaglethewings.com/Db/RmtDb.js?%s&%s&0", "tbfd", 0), "tbfd");
+	preload.Add(sprintf("http://127.knacc.eaglethewings.com/Db/RmtDb.js?%s&%s&0", "list", 0), "list");	
+	preload.End(1, function()
+	{
+		var res, ary;
+		res=preload.Get("tbfd");
+		console.log(res.ResText);		
+		ary=JSON.parse(res.ResText);
+		GrpTbAry.push(ary);
+		res=preload.Get("list");
+		console.log(res.ResText);	
+		ary=JSON.parse(res.ResText);
+		GrpRsAry.push(ary);		
+		var div=document.getElementById("tb0");
+		GrpDivAry.push(div);		
+		
+		DbTbView(GrpDivAry[0], GrpTbAry[0]);
+		DbRsView(GrpDivAry[0], GrpTbAry[0], GrpRsAry[0]);
+	}, 0, 0);
+	
+	
 </script>
 </head>
 <body>
@@ -93,7 +127,7 @@
 	<button onclick="TbPostUpd();" >TbPostUpd</button><br>		
 	<button onclick="TbPostDel();" >TbPostDel</button><br>	
 	<br>
-	<input type="text" style=" width: 100px;height: 20px; " value="asdfasf">
+	<div id="tb0"></div>
 </body>
 </html>
 
