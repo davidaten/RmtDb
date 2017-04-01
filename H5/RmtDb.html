@@ -8,10 +8,11 @@ table, th, td {
     border-collapse: collapse;
 }
 </style>
-<script src="/BaseFun.js"></script>
-<script src="/HttpReq.js"></script>
-<script src="/DbFun.js"></script>
+<script src="/RmtDb/H5/BaseFun.js"></script>
+<script src="/RmtDb/H5/HttpReq.js"></script>
+<script src="/RmtDb/H5/DbFun.js"></script>
 <script>
+
 
 	var fun=function(evt) 
 	{
@@ -29,7 +30,7 @@ table, th, td {
 	{
 		var cmd="tbfd";
 		var tb_idx=document.getElementById("tbidx").value;			
-		var url=sprintf("http://127.knacc.eaglethewings.com/Db/RmtDb.js?%s&%s&0", cmd, tb_idx);
+		var url=sprintf("/RmtDb/RmtDb.js?%s&%s&0", cmd, tb_idx);
 		
 		HttpAsync("Get",url,0,fun,0,0);
 	}
@@ -131,10 +132,10 @@ table, th, td {
 	var TbViewAsk=function(preload, tb_idx)
 	{
 		preload.Clr();	
-		preload.Add(sprintf("http://127.knacc.eaglethewings.com/Db/RmtDb.js?%s&%s&0", "tbfd", tb_idx), "tbfd"+tb_idx);
-		preload.Add(sprintf("http://127.knacc.eaglethewings.com/Db/RmtDb.js?%s&%s&0", "list", tb_idx), "list"+tb_idx);	
+		preload.Add(sprintf("/RmtDb/RmtDb.js?%s&%s&0", "tbfd", tb_idx), "tbfd"+tb_idx);
+		preload.Add(sprintf("/RmtDb/RmtDb.js?%s&%s&0", "list", tb_idx), "list"+tb_idx);	
 	}
-	
+
 	var preload=new PreLoadCls();
 	TbViewAsk(preload, TbIdx);
 	var preload_cb=function()
@@ -150,10 +151,11 @@ table, th, td {
 		preload.End(0, preload_cb, 0, 0);
 	};
 	preload.End(1, preload_cb, 0, 0);
-	
+
 </script>
 </head>
 <body>
+	<button onclick="DbTb2CDef('Usr',UsrFdList);" >Tb2CDef</button><br>
 	TbIdx:<input type="text" id="tbidx" style=" width: 100px;height: 20px; " value="1"><br>
 	RsId:<input type="text" id="rsid" style=" width: 100px;height: 20px; " value="1"><br>
 	<button onclick="TbGetTbFd();" >TbGetTbFd</button><br>
