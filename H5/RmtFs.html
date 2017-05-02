@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Test</title>
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+</style>
+<script src="/RmtDb/H5/BaseFun.js"></script>
+<script src="/RmtDb/H5/HttpReq.js"></script>
+<script src="/RmtDb/H5/DbFun.js"></script>
+<script>
+
+
+	var fun=function(evt) 
+	{
+		if (evt.type != "loadend")
+			return;
+		console.log(evt.target.responseText);
+	};
+	var DirTest = function()
+	{
+		HttpAsync("Post","/RmtFs/IoBox?list",0,fun,0,0);
+	}
+
+</script>
+</head>
+<body>
+	<button onclick="DirTest();" >DirTest</button><br>
+	<div id="db_div"></div>
+</body>
+</html>
+

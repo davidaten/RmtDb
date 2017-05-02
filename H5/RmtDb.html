@@ -39,7 +39,7 @@ table, th, td {
 	{
 		var cmd="list";
 		var tb_idx=document.getElementById("tbidx").value;	
-		var url=sprintf("http://127.knacc.eaglethewings.com/Db/RmtDb.js?%s&%s&0", cmd, tb_idx);
+		var url=sprintf("/RmtDb/RmtDb.js?%s&%s&0", cmd, tb_idx);
 		
 		HttpAsync("Get",url,0,fun,0,0);
 	}
@@ -90,11 +90,11 @@ table, th, td {
 		HttpAsync("Post",url,blob,fun,0,0);
 	}
 
+
     var DbDiv;
-	var TbIdx=0;
 	var TbfdAry=[];
 	var TbrsAry=[];
-	var Tb0FdNum,Tb0RsNum;
+	var Tb0FdNum,Tb0RsNum=1;
 	
 	var TbDivAry=[];
 	var TbOffAry=[];	
@@ -132,26 +132,34 @@ table, th, td {
 	var TbViewAsk=function(preload, tb_idx)
 	{
 		preload.Clr();	
-		preload.Add(sprintf("/RmtDb/RmtDb.js?%s&%s&0", "tbfd", tb_idx), "tbfd"+tb_idx);
+		//preload.Add(sprintf("/RmtDb/RmtDb.js?%s&%s&0", "tbfd", tb_idx), "tbfd"+tb_idx);
 		preload.Add(sprintf("/RmtDb/RmtDb.js?%s&%s&0", "list", tb_idx), "list"+tb_idx);	
 	}
 
-	var preload=new PreLoadCls();
-	TbViewAsk(preload, TbIdx);
-	var preload_cb=function()
+	var TbGetLoop=function()
 	{
-		TbViewAdd(TbIdx);
-		TbIdx++;
-		
-		//if (TbIdx>=2)		
-		if (TbIdx>=Tb0RsNum)
-			return;
-		
+		var LoopMax=parseInt(document.getElementById("loopmax").value);
+		var TbMax=parseInt(document.getElementById("tbmax").value);
+		var LoopCnt=0, TbIdx=0;
+		var preload=new PreLoadCls();
 		TbViewAsk(preload, TbIdx);
+		var preload_cb=function()
+		{
+			//TbViewAdd(TbIdx);
+			TbIdx++;
+			if (TbIdx>=TbMax)
+			{
+				LoopCnt++;
+				TbIdx=0;
+			}	
+			if (LoopCnt>=LoopMax)
+				return;
+		
+			TbViewAsk(preload, TbIdx);
+			preload.End(0, preload_cb, 0, 0);
+		};
 		preload.End(0, preload_cb, 0, 0);
-	};
-	preload.End(1, preload_cb, 0, 0);
-
+	}
 </script>
 </head>
 <body>
@@ -165,6 +173,11 @@ table, th, td {
 	<button onclick="TbPostUpd();" >TbPostUpd</button><br>		
 	<button onclick="TbPostDel();" >TbPostDel</button><br>	
 	<br>
+	LoopMax:<input type="text" id="loopmax" style=" width: 100px;height: 20px; " value="10"><br>	
+	TbMax:<input type="text" id="tbmax" style=" width: 100px;height: 20px; " value="1"><br>	
+	<button onclick="TbGetLoop();" >TbGetLoop</button><br>	
+	<br>
+
 	<div id="db_div"></div>
 </body>
 </html>
